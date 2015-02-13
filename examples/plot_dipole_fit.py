@@ -22,12 +22,13 @@ from mne.surface import read_bem_solution, _normalize_vectors
 data_path = sample.data_path()
 
 ave_fname = data_path + '/MEG/sample/sample_audvis-ave.fif'
+cov_fname = data_path + '/MEG/sample/sample_audvis-cov.fif'
 mri = data_path + '/MEG/sample/sample_audvis_raw-trans.fif'
 bem = data_path + '/subjects/sample/bem/sample-5120-5120-5120-bem-sol.fif'
 subjects_dir = data_path + '/subjects'
 
 @verbose
-def dipole_fit(evoked, mri, bem, tmin, tmax, origin=(0, 0, 40), meg=True, eeg=False,
+def dipole_fit(evoked, cov, mri, bem, tmin, tmax, origin=(0, 0, 40), meg=True, eeg=False,
                n_jobs=1, verbose=True):
     """XXX"""
     # Currently not (sup)ported:
@@ -74,4 +75,5 @@ def dipole_fit(evoked, mri, bem, tmin, tmax, origin=(0, 0, 40), meg=True, eeg=Fa
     return None
 
 evoked = mne.read_evokeds(ave_fname, condition=0, baseline=(None, 0))
-dip = dipole_fit(evoked, mri, bem, tmin=0.040, tmax=0.095, meg=True, eeg=False)
+cov = mne.read_cov(cov_fname)
+dip = dipole_fit(evoked, cov, mri, bem, tmin=0.040, tmax=0.095, meg=True, eeg=False)
